@@ -15,6 +15,7 @@ out
 .*
 
 !.gitignore
+!gradle/wrapper/gradle-wrapper.jar
 
 #idea project files
 *.iml
