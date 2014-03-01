@@ -1,0 +1,20 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#build directories
+build
+
+# test directory
+out
+
+# system files
+.*
+
+!.gitignore
+
+#idea project files
+*.iml
