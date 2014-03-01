@@ -1,0 +1,33 @@
+project(':web:jetty') {
+	description = 'Embedded Jetty'
+	dependencies {
+		compile 'org.eclipse.jetty:jetty-server:9.1.0.v20131115', 
+            'org.eclipse.jetty:jetty-webapp:9.1.0.v20131115',
+            'org.eclipse.jetty:jetty-annotations:9.1.0.v20131115',
+            'org.eclipse.jetty:jetty-plus:9.1.0.v20131115'
+	}
+}
+
+project(':web:servlet') {
+	description = 'Servlet API 3.+ implementation'
+	dependencies {
+		compile project(':web:jetty')
+	}
+}
+
+project(':web:spring') {
+	description = 'Attaches Spring to the project'
+	dependencies {
+		compile 'org.springframework:spring-webmvc:3.2.5.RELEASE'
+		compile project(':web:servlet')
+	}
+}
+
+project(':web:api') {
+    description = 'Web API'
+    dependencies {
+    	compile project(':web:servlet')
+    	compile 'org.glassfish.jersey.core:jersey-server:2.4.1',
+            'org.glassfish.jersey.containers:jersey-container-servlet:2.5.1'
+	}
+}

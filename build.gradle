@@ -1,0 +1,78 @@
+import org.gradle.api.artifacts.*
+
+apply plugin: 'base' // To add "clean" task to the root project.
+
+buildscript {
+    repositories {
+        maven {
+            name "public4finance"
+            url "http://repo.4finance.net/nexus/content/groups/public/"
+        }
+        maven {
+            name 'Gradle Shadow'
+            url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
+        }         
+        mavenLocal()
+    }
+    
+    dependencies {
+		classpath 'org.gradle.plugins:shadow:0.7.4'
+    }
+}
+
+
+subprojects {
+    apply from: rootProject.file('common.gradle')
+}
+
+task mergedJavadoc(type: Javadoc, description: 'Creates Javadoc from all the projects.') {
+    title = 'All modules'
+    destinationDir = new File(project.buildDir, 'merged-javadoc')
+
+    // Note: The closures below are executed lazily.
+    source {
+       subprojects*.sourceSets*.main*.allSource
+    }
+    classpath.from {
+        subprojects*.configurations*.compile*.copyRecursive({ !(it instanceof ProjectDependency); })*.resolve()
+    }
+}
+
+task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper to the current directory.') {
+    gradleVersion = '1.9'
+}
+
+project(':web') {
+	apply plugin: 'shadow'
+
+	dependencies {
+		compile project(':web:jetty')
+		compile project(':web:servlet')
+		compile project(':web:spring')
+		compile project(':web:api')
+	}
+	
+	shadow {
+		exclude 'META-INF/*.RSA' 
+		exclude 'META-INF/*.DSA'
+		exclude 'META-INF/*.SF'
+		exclude 'META-INF/maven/**/*'
+		exclude 'META-INF/*.txt'
+		exclude '*.html'
+		exclude '*.txt'
+	}
+	
+	jar {
+		manifest {
+			attributes 'Implementation-Title': 'Laokoon Web', 
+				'Implementation-Version': version, 
+				'Implementation-Vendor': 'skankjo',
+				'Built-By': System.getProperty('user.name'),
+				'Built-Date': new Date(),
+				'Built-JDK': System.getProperty('java.version'),
+				 'Main-Class': 'lt.skankjo.laokoon.jetty.EmbeddedJetty'
+		}
+	}
+}
+
+
