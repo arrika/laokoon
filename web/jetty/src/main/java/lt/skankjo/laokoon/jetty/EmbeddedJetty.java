@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.JettyWebXmlConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class EmbeddedJetty {
         Server server = new Server(port);
 
         Configuration.ClassList clist = Configuration.ClassList.setServerDefault(server);
-        clist.addBefore(JettyWebXmlConfiguration.class.getName(), AnnotationConfiguration.class.getName());
+        clist.addBefore(WebInfConfiguration.class.getName(), JettyWebXmlConfiguration.class.getName(), AnnotationConfiguration.class.getName());
 
         context.setContextPath(System.getProperty("ctxPath", "/"));
         context.setServer(server);
@@ -62,7 +63,8 @@ public class EmbeddedJetty {
         webapp.setWar(location.toExternalForm());
         webapp.setExtractWAR(false);
 
-        webapp.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", ".*");
+        webapp.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", getPattern());
+//        webapp.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", ".*\\.jar$|.*/classes/.*");
 
         if (System.getProperty("temp") != null) {
             File f = new File(System.getProperty("temp"));
@@ -72,5 +74,9 @@ public class EmbeddedJetty {
         }
 
         return webapp;
+    }
+
+    protected String getPattern() {
+        return ".*";
     }
 }
