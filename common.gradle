@@ -20,7 +20,8 @@ repositories {
 dependencies {
     // Adding dependencies here will add the dependencies to each subproject.
     testCompile 'junit:junit:4.11', 'org.hamcrest:hamcrest-all:1.3'
-    compile 'ch.qos.logback:logback-classic:1.0.13'
+    compile 'ch.qos.logback:logback-classic:1.0.13',
+            'com.google.guava:guava:15.0'
 }
 
 String mavenArtifactId = name

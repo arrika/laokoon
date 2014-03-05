@@ -1,5 +1,6 @@
 package lt.skankjo.laokoon.api.provider;
 
+import com.google.common.base.Optional;
 import jersey.repackaged.com.google.common.base.Preconditions;
 import jersey.repackaged.com.google.common.collect.Lists;
 import jersey.repackaged.com.google.common.collect.Maps;
@@ -28,7 +29,7 @@ public class ValidationErrorMapper implements ExceptionMapper<ValidationExceptio
         List<ValidationError> errors = Lists.newArrayList();
         Set<ConstraintViolation<?>> violations = exceptions.getConstraintViolations();
         for(ConstraintViolation<?> violation : violations) {
-            errors.add(new ValidationError(violation.getMessage(), violation.getMessageTemplate(), violation.getPropertyPath(), violation.getInvalidValue()));
+            errors.add(new ValidationError(violation.getMessage(), violation.getMessageTemplate(), Optional.fromNullable(violation.getPropertyPath()), Optional.fromNullable(violation.getInvalidValue())));
         }
 
         Map<String, List<ValidationError>> msg = Maps.newHashMap();
@@ -42,11 +43,11 @@ public class ValidationErrorMapper implements ExceptionMapper<ValidationExceptio
         private final String path;
         private final String invalidValue;
 
-        public ValidationError(String message, String messageTemplate, Path path, Object invalidValue) {
+        public ValidationError(String message, String messageTemplate, Optional<Path> path, Optional<Object> invalidValue) {
             this.message = message;
             this.messageTemplate = messageTemplate;
-            this.path = path == null ? null : path.toString();
-            this.invalidValue = invalidValue == null ? null : invalidValue.toString();
+            this.path = path.isPresent() ? path.get().toString() : null;
+            this.invalidValue = invalidValue.isPresent() ? invalidValue.get().toString() : null;
         }
 
         public String getMessage() {
