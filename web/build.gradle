@@ -3,8 +3,12 @@ project(':web:jetty') {
 	dependencies {
 		compile 'org.eclipse.jetty:jetty-server:9.1.0.v20131115', 
             'org.eclipse.jetty:jetty-webapp:9.1.0.v20131115',
-            'org.eclipse.jetty:jetty-annotations:9.1.0.v20131115',
             'org.eclipse.jetty:jetty-plus:9.1.0.v20131115'
+        compile('org.eclipse.jetty:jetty-annotations:9.1.0.v20131115') {
+//            exclude group: 'org.ow2.asm', module: 'asm'
+//            exclude group: 'org.ow2.asm', module: 'asm-commons'
+        }
+//        compile 'asm:asm-all:3.3.1'
 	}
 }
 
@@ -23,15 +27,6 @@ project(':web:spring') {
 	}
 }
 
-project(':web:api') {
-    description = 'Web API'
-    dependencies {
-    	compile project(':web:servlet')
-    	compile('org.glassfish.jersey.containers:jersey-container-servlet:2.6') {
-            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
-            exclude group: 'org.glassfish.jersey.bundles.repackaged', module: 'jersey-guava'
-        }
-        compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.6',
-                'org.glassfish.jersey.ext:jersey-bean-validation:2.6'
-	}
-}
+apply from: 'api/build.gradle'
+//apply from: 'jersey1/build.gradle'
+

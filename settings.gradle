@@ -1,3 +1,5 @@
 rootProject.name = 'laokoon'
 
-include ':web:jetty', ':web:servlet', ':web:spring', ':web:api'
+include ':web:jetty', ':web:servlet', ':web:spring',
+//        ':web:jersey1'
+':web:api'

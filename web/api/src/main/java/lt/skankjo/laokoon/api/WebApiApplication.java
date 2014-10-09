@@ -10,7 +10,5 @@ public class WebApiApplication extends ResourceConfig {
     public WebApiApplication() {
         super(JacksonFeature.class);
         packages("lt.skankjo.laokoon.api");
-
-
     }
 }

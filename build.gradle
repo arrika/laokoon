@@ -45,12 +45,28 @@ task wrapper(type: Wrapper, description: 'Creates and deploys the Gradle wrapper
 project(':web') {
 	apply plugin: 'shadow'
 
+    configurations {
+        shadowArchive {
+            transitive = true
+        }
+    }
+
 	dependencies {
 		compile project(':web:jetty')
 		compile project(':web:servlet')
 		compile project(':web:spring')
 		compile project(':web:api')
+
+        shadowArchive 'com.google.code.guice:guice:1.0'
+//		compile project(':web:jersey1')
 	}
+
+    ext.shadowTask = tasks.getByPath('shadow')
+    shadowTask.dependsOn {
+        configurations.compile {
+            extendsFrom configurations.shadowArchive
+        }
+    }
 	
 	shadow {
 		exclude 'META-INF/*.RSA' 
