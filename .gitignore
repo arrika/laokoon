@@ -11,11 +11,13 @@ build
 # test directory
 out
 
+#gradle directory
+gradle
+
 # system files
 .*
 
 !.gitignore
-!gradle/wrapper/gradle-wrapper.jar
 
 #idea project files
 *.iml

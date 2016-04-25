@@ -9,12 +9,15 @@ apply plugin: 'idea'
 String mavenGroupId = 'lt.skankjo.laokoon'
 String mavenVersion = '1.0-SNAPSHOT'
 
-sourceCompatibility = '1.7'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 repositories {
-    mavenCentral();
+    mavenCentral()
     mavenLocal()
+    jcenter()
 }
 
 dependencies {
@@ -47,10 +50,10 @@ configure(install.repositories.mavenInstaller) {
     }
 }
 
-task createFolders(description: 'Creates the source folders if they do not exist.') doLast {
+task createSourceFolders(description: 'Creates the source folders if they do not exist.') << {
     sourceSets*.allSource*.srcDirs*.each { File srcDir ->
         if (!srcDir.isDirectory()) {
-            println "Creating source folder: ${srcDir}"
+            logger.info "Creating source folder: ${srcDir}"
             srcDir.mkdirs()
         }
     }
